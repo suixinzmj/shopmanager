@@ -16,21 +16,21 @@
 export default {
   data () {
     return {
-        formdate: {
-          username: "",
-          password: ""
-        }
+      formdate: {
+        username: '',
+        password: ''
+      }
     }
   }
 }
 </script>
 
 <style>
-    .login-wrap {
-        background-color: #324152;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+  .login-wrap {
+    background-color: #324152;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 </style>
