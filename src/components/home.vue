@@ -141,7 +141,7 @@ export default {
   background-color: #fff;
 }
 .main {
-  background-color: skyblue;
+  background-color: #e9eef3;
 }
 .middle {
   line-height: 60px;
