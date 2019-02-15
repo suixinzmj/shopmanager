@@ -31,13 +31,24 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" width="200">
-        <template slot-scope="scope">
+        <template>
           <el-button type="primary" icon="el-icon-edit" circle size="mini" plain></el-button>
           <el-button type="danger" icon="el-icon-delete" circle size="mini" plain></el-button>
           <el-button type="success" icon="el-icon-check" circle size="mini" plain></el-button>
         </template>
       </el-table-column>
     </el-table>
+    <!-- 分页 -->
+    <el-pagination
+    class="page"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="pagenum"
+      :page-sizes="[1, 2, 3]"
+      :page-size="1"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+    ></el-pagination>
   </el-card>
 </template>
 
@@ -47,14 +58,25 @@ export default {
     return {
       query: "",
       pagenum: 1,
-      pagesize: 2,
-      list: []
+      pagesize: 1,
+      list: [],
+      total: -1
     };
   },
-  mounted() {
+  created() {
     this.getTableData();
   },
   methods: {
+    // 分页相关
+    handleSizeChange(val) {
+      this.pagenum = 1;
+      this.pagesize = val;
+      this.getTableData();
+    },
+    handleCurrentChange(val) {
+      this.pagenum = val;
+      this.getTableData();
+    },
     // 请求数据
     async getTableData() {
       // 设置请求头 权限设置
@@ -72,6 +94,7 @@ export default {
       } = res.data;
       if (status === 200) {
         this.list = data.users;
+        this.total = data.total;
       }
     }
   }
@@ -87,5 +110,8 @@ export default {
 }
 .searchInput {
   width: 350px;
+}
+.page {
+    margin-top: 20px;
 }
 </style>
