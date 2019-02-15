@@ -17,10 +17,14 @@
       </el-col>
     </el-row>
     <!-- 表格 -->
-    <el-table :data="tableData" stripe style="width: 100%">
-      <el-table-column prop="date" label="日期" width="180"></el-table-column>
-      <el-table-column prop="name" label="姓名" width="180"></el-table-column>
-      <el-table-column prop="address" label="地址"></el-table-column>
+    <el-table :data="list" stripe style="width: 100%">
+      <el-table-column prop="id" label="#" width="80"></el-table-column>
+      <el-table-column prop="username" label="姓名" width="120"></el-table-column>
+      <el-table-column prop="email" label="邮箱" width="140"></el-table-column>
+      <el-table-column prop="moblie" label="电话" width="140"></el-table-column>
+      <el-table-column label="创建日期" width="140"></el-table-column>
+      <el-table-column label="用户状态" width="140"></el-table-column>
+      <el-table-column label="操作" width="200"></el-table-column>
     </el-table>
   </el-card>
 </template>
@@ -30,29 +34,35 @@ export default {
   data() {
     return {
       query: "",
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄"
-        }
-      ]
+      pagenum: 1,
+      pagesize: 2,
+      list: []
     };
+  },
+  mounted() {
+    this.getTableData()
+  },
+  methods: {
+    // 请求数据
+    async getTableData() {
+      // 设置请求头 权限设置
+      const AUTH_TOKEN = localStorage.getItem("token");
+      this.$http.defaults.headers.common["Authorization"] = AUTH_TOKEN;
+      // 请求数据
+      const res = await this.$http.get(
+        `users?query=${this.query}&pagenum=${this.pagenum}&pagesize=${
+          this.pagesize
+        }`
+      );
+      console.log(res);
+      const {
+        data,
+        meta: { msg, status }
+      } = res.data;
+      if (status === 200) {
+          this.list = data.users
+      }
+    }
   }
 };
 </script>
