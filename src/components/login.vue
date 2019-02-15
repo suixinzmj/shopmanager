@@ -25,25 +25,44 @@ export default {
   },
   methods: {
     // 发送登录请求
-    handleLogin () {
-      this.$http.post(`login`, this.formdata)
-        .then(res => {
-          console.log(res)
-          const {
-            data: {
-              data,
-              meta: {msg, status}
-            }
-          } = res
-          if (status === 200) {
-            // 渲染home.vue组件 编程时导航
-            this.$router.push({
-              name: 'home'
-            })
-          } else {
-            this.$message.error(msg)
-          }
+    async handleLogin () {
+      // 简化处理结果res
+      const res = await this.$http.post(`login`, this.formdata)
+      const {
+        data:{
+          data,
+          meta: { msg, status }
+        }
+      } = res
+
+      if (status === 200) {
+        // 渲染home.vue组件 编程时导航
+        this.$router.push({
+          name: 'home'
         })
+      } else {
+        this.$message.error(msg)
+      }
+      
+      // 处理异步操作结果res
+      // this.$http.post(`login`, this.formdata)
+      //   .then(res => {
+      //     console.log(res)
+      //     const {
+      //       data: {
+      //         data,
+      //         meta: {msg, status}
+      //       }
+      //     } = res
+      //     if (status === 200) {
+      //       // 渲染home.vue组件 编程时导航
+      //       this.$router.push({
+      //         name: 'home'
+      //       })
+      //     } else {
+      //       this.$message.error(msg)
+      //     }
+      //   })
     }
   }
 }
