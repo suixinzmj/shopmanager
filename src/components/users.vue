@@ -22,7 +22,11 @@
       <el-table-column prop="username" label="姓名" width="120"></el-table-column>
       <el-table-column prop="email" label="邮箱" width="140"></el-table-column>
       <el-table-column prop="moblie" label="电话" width="140"></el-table-column>
-      <el-table-column label="创建日期" width="140"></el-table-column>
+      <el-table-column label="创建日期" width="140">
+          <template slot-scope="scope">
+              {{ scope.row.create_time | fmtdate }}
+          </template>
+      </el-table-column>
       <el-table-column label="用户状态" width="140"></el-table-column>
       <el-table-column label="操作" width="200"></el-table-column>
     </el-table>
@@ -54,7 +58,6 @@ export default {
           this.pagesize
         }`
       );
-      console.log(res);
       const {
         data,
         meta: { msg, status }
