@@ -30,14 +30,14 @@ export default {
       const res = await this.$http.post(`login`, this.formdata)
       const {
         data:{
-          data: { token },
+          data,
           meta: { msg, status }
         }
       } = res
 
       if (status === 200) {
         // 存储token到本地存储localStotage
-        localStorage.setItem('token', token)
+        localStorage.setItem('token', data.token)
         // 渲染home.vue组件 编程时导航
         this.$router.push({
           name: 'home'
