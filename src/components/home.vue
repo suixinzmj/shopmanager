@@ -9,7 +9,7 @@
           <h2>电商后台管理系统</h2>
         </el-col>
         <el-col :span="1">
-          <a href="#" class="logout">退出</a>
+          <a href="#" class="logout" @click.prevent="handleLoginout()">退出</a>
         </el-col>
       </el-row>
     </el-header>
@@ -107,13 +107,22 @@
 
 <script>
 export default {
-  beforeMount () {
-     if (!localStorage.getItem('token')) {
-       this.$router.push({
-         name: 'login'
-       })
-       this.$message.warning('请先登录')
-     }
+  beforeMount() {
+    if (!localStorage.getItem("token")) {
+      this.$router.push({
+        name: "login"
+      });
+      this.$message.warning("请先登录");
+    }
+  },
+  methods: {
+    handleLoginout() {
+      localStorage.clear();
+      this.$router.push({
+        name: "login"
+      });
+      this.$message.warning("退出成功");
+    }
   }
 };
 </script>
