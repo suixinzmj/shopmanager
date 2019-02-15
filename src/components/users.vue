@@ -23,11 +23,13 @@
       <el-table-column prop="email" label="邮箱" width="140"></el-table-column>
       <el-table-column prop="moblie" label="电话" width="140"></el-table-column>
       <el-table-column label="创建日期" width="140">
-          <template slot-scope="scope">
-              {{ scope.row.create_time | fmtdate }}
-          </template>
+        <template slot-scope="scope">{{ scope.row.create_time | fmtdate }}</template>
       </el-table-column>
-      <el-table-column label="用户状态" width="140"></el-table-column>
+      <el-table-column label="用户状态" width="140">
+        <template slot-scope="scope">
+          <el-switch v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="200"></el-table-column>
     </el-table>
   </el-card>
@@ -44,7 +46,7 @@ export default {
     };
   },
   mounted() {
-    this.getTableData()
+    this.getTableData();
   },
   methods: {
     // 请求数据
@@ -63,7 +65,7 @@ export default {
         meta: { msg, status }
       } = res.data;
       if (status === 200) {
-          this.list = data.users
+        this.list = data.users;
       }
     }
   }
