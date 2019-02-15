@@ -106,7 +106,16 @@
 </template>
 
 <script>
-export default {};
+export default {
+  beforeMount () {
+     if (!localStorage.getItem('token')) {
+       this.$router.push({
+         name: 'login'
+       })
+       this.$message.warning('请先登录')
+     }
+  }
+};
 </script>
 
 <style>
