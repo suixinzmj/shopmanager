@@ -26,8 +26,20 @@ export default {
   methods: {
     // 发送登录请求
     handleLogin () {
-      this.$http.post(`login`, this.formdata).then(res => {
+      this.$http.post(`login`, this.formdata)
+      .then(res => {
         console.log(res)
+        const {
+          data: {
+            // data,
+            meta: {msg, status}
+            }
+        } = res
+        if (status === 200) {
+          console.log('success-----')
+        } else {
+          this.$message.error(msg)
+        }
       })
     }
   }
