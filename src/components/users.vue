@@ -9,7 +9,6 @@
     <!-- 搜索框 -->
     <el-row class="seartBox">
       <el-col>
-<<<<<<< HEAD
         <!-- 搜索框 -->
         <el-input
           @clear="getAllUsers()"
@@ -26,17 +25,6 @@
     </el-row>
     <!-- 表格 -->
     <el-table :data="list" style="width: 100%">
-=======
-        <el-input placeholder="请输入内容" v-model="query" class="searchInput" clearable="true">
-          <el-button slot="append" icon="el-icon-search"></el-button>
-        </el-input>
-        <!-- 添加按钮 -->
-        <el-button type="success">添加用户</el-button>
-      </el-col>
-    </el-row>
-    <!-- 表格 -->
-    <el-table :data="list" stripe style="width: 100%">
->>>>>>> c191b7887f9f45acc7bf66d7560a53b1351a61f6
       <el-table-column prop="id" label="#" width="80"></el-table-column>
       <el-table-column prop="username" label="姓名" width="120"></el-table-column>
       <el-table-column prop="email" label="邮箱" width="140"></el-table-column>
@@ -50,23 +38,15 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" width="200">
-<<<<<<< HEAD
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" circle size="mini" plain></el-button>
           <el-button type="success" icon="el-icon-check" circle size="mini" plain></el-button>
           <el-button type="danger" icon="el-icon-delete" circle size="mini" plain></el-button>
-=======
-        <template>
-          <el-button type="primary" icon="el-icon-edit" circle size="mini" plain></el-button>
-          <el-button type="danger" icon="el-icon-delete" circle size="mini" plain></el-button>
-          <el-button type="success" icon="el-icon-check" circle size="mini" plain></el-button>
->>>>>>> c191b7887f9f45acc7bf66d7560a53b1351a61f6
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页 -->
     <el-pagination
-<<<<<<< HEAD
       class="page"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
@@ -96,20 +76,9 @@
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisibleAdd = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisibleAdd = false">确 定</el-button>
+        <el-button type="primary" @click="addUser()">确 定</el-button>
       </div>
     </el-dialog>
-=======
-    class="page"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pagenum"
-      :page-sizes="[1, 2, 3]"
-      :page-size="1"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-    ></el-pagination>
->>>>>>> c191b7887f9f45acc7bf66d7560a53b1351a61f6
   </el-card>
 </template>
 
@@ -119,7 +88,6 @@ export default {
     return {
       query: "",
       pagenum: 1,
-<<<<<<< HEAD
       pagesize: 2,
       total: -1,
       list: [],
@@ -130,20 +98,27 @@ export default {
         email: "",
         mobile: ""
       }
-=======
-      pagesize: 1,
-      list: [],
-      total: -1
->>>>>>> c191b7887f9f45acc7bf66d7560a53b1351a61f6
     };
   },
   created() {
     this.getTableData();
   },
   methods: {
-<<<<<<< HEAD
+    // 添加用户
+    async addUser() {
+      const res = await this.$http.post(`users`, this.formdata);
+      const {
+        meta: { msg, status }
+      } = res.data;
+      if (status === 201) {
+        this.getTableData();
+        this.dialogFormVisibleAdd = false;
+      }
+    },
+
     // 添加- 打开对话框
     showDiaAddUser() {
+      this.formdata = {};
       this.dialogFormVisibleAdd = true;
     },
 
@@ -161,26 +136,16 @@ export default {
     // 分页相关
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
-=======
-    // 分页相关
-    handleSizeChange(val) {
->>>>>>> c191b7887f9f45acc7bf66d7560a53b1351a61f6
       this.pagenum = 1;
       this.pagesize = val;
       this.getTableData();
     },
     handleCurrentChange(val) {
-<<<<<<< HEAD
       console.log(`当前页: ${val}`);
       this.pagenum = val;
       this.getTableData();
     },
 
-=======
-      this.pagenum = val;
-      this.getTableData();
-    },
->>>>>>> c191b7887f9f45acc7bf66d7560a53b1351a61f6
     // 请求数据
     async getTableData() {
       // 设置请求头 权限设置
@@ -216,10 +181,6 @@ export default {
   width: 350px;
 }
 .page {
-<<<<<<< HEAD
   margin-top: 20px;
-=======
-    margin-top: 20px;
->>>>>>> c191b7887f9f45acc7bf66d7560a53b1351a61f6
 }
 </style>
