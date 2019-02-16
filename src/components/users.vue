@@ -39,7 +39,14 @@
       </el-table-column>
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" circle size="mini" plain></el-button>
+          <el-button
+            @click="showDiaEditUser(scope.row)"
+            type="primary"
+            icon="el-icon-edit"
+            circle
+            size="mini"
+            plain
+          ></el-button>
           <el-button type="success" icon="el-icon-check" circle size="mini" plain></el-button>
           <el-button
             @click="showMsgBoxDele(scope.row)"
@@ -86,6 +93,26 @@
         <el-button type="primary" @click="addUser()">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 对话框 编辑用户 -->
+    <el-dialog title="编辑用户" :visible.sync="dialogFormVisibleEdit">
+      <!-- 表单 -->
+      <el-form label-position="left" label-width="80px" :model="formdata">
+        <el-form-item label="用户名">
+          <el-input disabled v-model="formdata.username"></el-input>
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-input v-model="formdata.password"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱">
+          <el-input v-model="formdata.email"></el-input>
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisibleEdit = false">取 消</el-button>
+        <el-button type="primary" @click="editUser()">确 定</el-button>
+      </div>
+    </el-dialog>
   </el-card>
 </template>
 
@@ -99,6 +126,7 @@ export default {
       total: -1,
       list: [],
       dialogFormVisibleAdd: false,
+      dialogFormVisibleEdit: false,
       formdata: {
         username: "",
         password: "",
@@ -111,7 +139,28 @@ export default {
     this.getTableData();
   },
   methods: {
-    // 刪除用户 对话框
+    // 编辑用户发送请求
+    async editUser() {
+      const res = await this.$http.put(
+        `users/${this.formdata.id}`,
+        this.formdata
+      );
+      const {
+        meta: { msg, status }
+      } = res.data;
+      if (status === 200) {
+        this.dialogFormVisibleEdit = false;
+        this.getTableData();
+      }
+    },
+
+    // 编辑用户
+    showDiaEditUser(user) {
+      this.formdata = user;
+      this.dialogFormVisibleEdit = true;
+    },
+
+    // 刪除用户
     showMsgBoxDele(user) {
       this.$confirm("确定要删除吗?", "提示", {
         confirmButtonText: "确定",
@@ -123,7 +172,7 @@ export default {
           const {
             meta: { msg, status }
           } = res.data;
-          if (status === 200) { 
+          if (status === 200) {
             this.pagenum = 1;
             this.getTableData();
             this.$message.success(msg);
@@ -165,13 +214,11 @@ export default {
 
     // 分页相关
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
       this.pagenum = 1;
       this.pagesize = val;
       this.getTableData();
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
       this.pagenum = val;
       this.getTableData();
     },
