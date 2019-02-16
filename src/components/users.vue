@@ -15,7 +15,7 @@
           placeholder="请输入内容"
           v-model="query"
           class="searchInput"
-          clearable="true"
+          clearable
         >
           <el-button slot="append" icon="el-icon-search" @click="searchUser()"></el-button>
         </el-input>
@@ -42,7 +42,7 @@
           <el-button type="primary" icon="el-icon-edit" circle size="mini" plain></el-button>
           <el-button type="success" icon="el-icon-check" circle size="mini" plain></el-button>
           <el-button
-            @click="showMsgBoxDele()"
+            @click="showMsgBoxDele(scope.row)"
             type="danger"
             icon="el-icon-delete"
             circle
@@ -112,23 +112,25 @@ export default {
   },
   methods: {
     // 刪除用户 对话框
-    showMsgBoxDele() {
+    showMsgBoxDele(user) {
       this.$confirm("确定要删除吗?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
+        .then(async () => {
+          const res = await this.$http.delete(`users/${user.id}`);
+          const {
+            meta: { msg, status }
+          } = res.data;
+          if (status === 200) { 
+            this.pagenum = 1;
+            this.getTableData();
+            this.$message.success(msg);
+          }
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
+          this.$message.info("已取消删除");
         });
     },
 
