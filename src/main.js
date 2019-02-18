@@ -8,10 +8,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/css/base.css'
 import CusBread from '@/components/cusBread.vue'
 import moment from 'moment'
-import axios from 'axios'
-Vue.prototype.$http = axios
-axios.defaults.baseURL = 'http://localhost:8888/api/private/v1/'
+import HttpServer from '@/http.js'
 
+Vue.use(HttpServer)
 Vue.use(ElementUI)
 // 格式化日期
 Vue.filter('fmtdate', (v) => {
