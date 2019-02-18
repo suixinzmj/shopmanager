@@ -289,9 +289,6 @@ export default {
 
     // 请求数据
     async getTableData() {
-      // 设置请求头 权限设置
-      const AUTH_TOKEN = localStorage.getItem("token");
-      this.$http.defaults.headers.common["Authorization"] = AUTH_TOKEN;
       // 请求数据
       const res = await this.$http.get(
         `users?query=${this.query}&pagenum=${this.pagenum}&pagesize=${
