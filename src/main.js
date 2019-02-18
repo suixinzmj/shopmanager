@@ -6,6 +6,7 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/css/base.css'
+import CusBread from '@/components/cusBread.vue'
 import moment from 'moment'
 import axios from 'axios'
 Vue.prototype.$http = axios
@@ -18,6 +19,9 @@ Vue.filter('fmtdate', (v) => {
 })
 
 Vue.config.productionTip = false
+
+// 全局自定义面包屑组件
+Vue.component(CusBread.name, CusBread)
 
 /* eslint-disable no-new */
 new Vue({
