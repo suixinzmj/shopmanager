@@ -1,6 +1,6 @@
 <template>
 <el-card class="box">
-  <cus-Bread level1='商品管理' level2='商品列表'></cus-Bread>
+  <cus-bread level1='商品管理' level2='商品列表'></cus-bread>
 
  <!-- 搜索框 -->
   <el-row class="searchArea">
