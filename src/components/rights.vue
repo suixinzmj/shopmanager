@@ -3,7 +3,7 @@
     <!-- 面包屑 -->
     <cus-bread level1="权限管理" level2="权限列表"></cus-bread>
     <!-- 表格 -->
-    <el-table height="580px" :data="list" style="width: 100%" class="table">
+    <el-table height="350px" :data="list" style="width: 100%" class="table">
       <el-table-column type="index" width="160"></el-table-column>
       <el-table-column property="authName" label="权限名称" width="200"></el-table-column>
       <el-table-column property="path" label="路径" width="200"></el-table-column>
@@ -46,8 +46,5 @@ export default {
 <style>
 .box {
   height: 100%;
-}
-.table {
-    margin-top: 10px;
 }
 </style>
