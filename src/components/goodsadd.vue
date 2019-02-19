@@ -15,7 +15,30 @@
     <!-- tabs标签 -->
     <el-form :model="form" class="form" label-position="top" label-width="80px">
       <el-tabs tab-position="left" @tab-click="changeTab()" v-model="active">
-        <el-tab-pane label="基本信息" name="1">基本信息</el-tab-pane>
+        <el-tab-pane label="基本信息" name="1">
+          <el-form-item label="商品名称">
+            <el-input v-model="form.goods_name"></el-input>
+          </el-form-item>
+          <el-form-item label="商品价格">
+            <el-input v-model="form.goods_price"></el-input>
+          </el-form-item>
+          <el-form-item label="商品重量">
+            <el-input v-model="form.goods_weight"></el-input>
+          </el-form-item>
+          <el-form-item label="商品数量">
+            <el-input v-model="form.goods_number"></el-input>
+          </el-form-item>
+          <el-form-item label="商品分类">
+            <el-cascader
+              clearable
+              expand-trigger="hover"
+              :options="options"
+              :props="defaultProp"
+              v-model="selectedOptions2"
+              @change="handleChange"
+            ></el-cascader>
+          </el-form-item>
+        </el-tab-pane>
         <el-tab-pane label="商品参数" name="2">商品参数</el-tab-pane>
         <el-tab-pane label="商品属性" name="3">商品属性</el-tab-pane>
         <el-tab-pane label="商品图片" name="4">商品图片</el-tab-pane>
@@ -31,12 +54,42 @@ export default {
     return {
       active: "1",
       form: {
-
+        goods_name: "",
+        goods_cat: "",
+        goods_price: "",
+        goods_number: "",
+        goods_weight: "",
+        goods_introduce: "",
+        pics: "",
+        attrs: ""
+      },
+      options: [],
+      selectedOptions2: [1, 3, 6],
+      defaultProp: {
+        label: "cat_name",
+        value: "cat_id"
       }
     };
   },
+  created() {
+    this.getGoodsCate();
+  },
   methods: {
-      changeTab(){}
+    handleChange() {},
+    changeTab() {},
+
+    // 获取三级商品分类数据
+    async getGoodsCate() {
+      const res = await this.$http.get(`categories?type=3`);
+      const {
+        meta: { msg, status },
+        data
+      } = res.data;
+      if (status === 200) {
+        this.options = data;
+      }
+      console.log(this.options);
+    }
   }
 };
 </script>
