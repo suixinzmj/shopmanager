@@ -60,6 +60,29 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 对话框 -->
+    <el-dialog title="分配权限" :visible.sync="dialogFormVisible">
+      <!--
+        data数据源
+        node-key每个节点唯一标识
+        default-expanded-keys[] 默认展开
+      default-checked-keys [] 默认选中
+      props配置选项{label/children}
+      -->
+      <el-tree
+        ref="treeDom"
+        :data="treelist"
+        show-checkbox
+        node-key="id"
+        default-expand-all
+        :default-checked-keys="arrCheck"
+        :props="defaultProps"
+      ></el-tree>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="setRights()">确 定</el-button>
+      </div>
+    </el-dialog>
   </el-card>
 </template>
 
@@ -67,14 +90,62 @@
 export default {
   data() {
     return {
-      roles: []
+      roles: [],
+      dialogFormVisible: false,
+      treelist: [],
+      arrCheck: [],
+      defaultProps: {
+        label: "authName",
+        children: "children"
+      },
+      currRoleId: -1
     };
   },
   created() {
     this.getRoles();
   },
   methods: {
-    showDiaSetRights() {},
+    async setRights() {
+      const arr1 = this.$refs.treeDom.getCheckedKeys();
+      const arr2 = this.$refs.treeDom.getHalfCheckedKeys();
+      const arr = [...arr1, ...arr2];
+
+      const res = await this.$http.post(`roles/${this.currRoleId}/rights`, {
+        rids: arr.join(",")
+      });
+
+      const {
+        meta: { msg, status },
+        data
+      } = res.data;
+      if (status === 200) {
+        this.dialogFormVisible = false;
+        this.getRoles();
+      }
+    },
+    // 分配权限 - 打开对话框
+    async showDiaSetRights(role) {
+      this.currRoleId = role.id;
+      const res = await this.$http.get(`rights/tree`);
+      const {
+        meta: { msg, status },
+        data
+      } = res.data;
+      if (status === 200) {
+        this.treelist = data;
+        const temp2 = [];
+        role.children.forEach(item1 => {
+          item1.children.forEach(item2 => {
+            item2.children.forEach(item3 => {
+              temp2.push(item3.id);
+            });
+          });
+        });
+
+        this.arrCheck = temp2;
+      }
+      this.dialogFormVisible = true;
+    },
     async deleRights(role, rights) {
       const res = await this.$http.delete(
         `roles/${role.id}/rights/${rights.id}`
