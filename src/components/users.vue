@@ -219,8 +219,9 @@ export default {
     },
 
     // 编辑用户
-    showDiaEditUser(user) {
-      this.formdata = user;
+    async showDiaEditUser(user) {
+      const res = await this.$http.get(`users/${user.id}`);
+      this.formdata = res.data.data;
       this.dialogFormVisibleEdit = true;
     },
 

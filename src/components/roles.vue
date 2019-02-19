@@ -10,17 +10,22 @@
         <template slot-scope="scope">
           <el-row v-for="(item1, i) in scope.row.children" :key="item1.id" class="level1">
             <el-col :span="4">
-              <el-tag closable>{{ item1.authName }}</el-tag>
+              <el-tag @close="deleRights(scope.row,item1)" closable>{{ item1.authName }}</el-tag>
               <i class="el-icon-arrow-right"></i>
             </el-col>
             <el-col :span="20">
               <el-row v-for="(item2, i) in item1.children" :key="item2.id" class="level2">
                 <el-col :span="4">
-                  <el-tag closable type="warning">{{ item2.authName }}</el-tag>
+                  <el-tag
+                    @close="deleRights(scope.row,item2)"
+                    closable
+                    type="warning"
+                  >{{ item2.authName }}</el-tag>
                   <i class="el-icon-arrow-right"></i>
                 </el-col>
                 <el-col :span="20">
                   <el-tag
+                    @close="deleRights(scope.row,item3)"
                     closable
                     type="info"
                     v-for="(item3, i) in item2.children"
@@ -28,6 +33,11 @@
                   >{{ item3.authName }}</el-tag>
                 </el-col>
               </el-row>
+            </el-col>
+          </el-row>
+          <el-row v-if="scope.row.children.length===0">
+            <el-col>
+              <span>未分配权限</span>
             </el-col>
           </el-row>
         </template>
@@ -65,6 +75,19 @@ export default {
   },
   methods: {
     showDiaSetRights() {},
+    async deleRights(role, rights) {
+      const res = await this.$http.delete(
+        `roles/${role.id}/rights/${rights.id}`
+      );
+      const {
+        meta: { msg, status },
+        data
+      } = res.data;
+      if (status === 200) {
+        this.$message.success(msg);
+        role.children = data;
+      }
+    },
     async getRoles() {
       const res = await this.$http.get(`roles`);
       const {
@@ -86,8 +109,7 @@ export default {
 .addRoles {
   margin-top: 20px;
 }
-.level1,
-.level2 {
+.level1 {
   margin-top: 10px;
 }
 </style>
